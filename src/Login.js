@@ -1,9 +1,15 @@
 import React, { useState } from "react";
 import axios from "axios";
+import Cookies from "universal-cookie";
+import { useNavigate } from "react-router-dom";
 
 function Login () {
     const [password, setPasswordValue] = useState("");
     const [username, setUsernameValue] = useState(""); 
+
+    const cookies = new Cookies();
+
+    const navigate = useNavigate();
 
     const setPassword = (e) => {
         setPasswordValue(e.target.value);
@@ -18,12 +24,12 @@ function Login () {
         console.log("Submit!!" + username + ',' + password);
     
         const data = {
-            "username": username,
+            "email": username,
             "password": password
         }
 
         try{
-            const response = await axios.post("http://localhost:8080/loginUser", data);
+            const response = await axios.post("http://localhost:8080/auth/login", data);
 
             if(response.data == false)
             {
@@ -31,7 +37,10 @@ function Login () {
             }
             else
             {
+                const token = response.data.token;
+                cookies.set("token", token);
                 alert("Login Successful");
+                navigate("/users");
             }
         }
 
