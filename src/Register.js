@@ -3,9 +3,15 @@ import axios from "axios";
 
 function Register () {
     const [password, setPasswordValue] = useState("");
+    const [passwordValid, setPasswordValid] = useState(true);
+    const [emailValid, setEmailValid] = useState(true);
+    const [errorMessage, setErrorMessage] = useState('');
     const [email, setEmailValue] = useState(""); 
+    const [emailErrorMsg, setEmailErrorMsg] = useState('');
     const [name, setNameValue] = useState("");
     const [phoneNo, setPhoneValue] = useState("");
+    const [phoneValid, setPhoneValid] = useState(true);
+    const [phoneErrorMsg, setPhoneErrorMsg] = useState('');
     const [role, setRoleValue] = useState("");
 
     const setName = (e) => {
@@ -13,15 +19,77 @@ function Register () {
     }
 
     const setPhone = (e) => {
-        setPhoneValue(e.target.value);
-    }
+        const enteredPhone = e.target.value;
+        setPhoneValue(enteredPhone);
+        const regex = /[0-9]/;
+        let isValid = true;
+        
+        if(enteredPhone.length!=10)
+        {
+            isValid = false;
+            setPhoneErrorMsg("Minimum length is 10.");
+        }
 
-    const setPassword = (e) => {
-        setPasswordValue(e.target.value);
+        if(!regex.test(enteredPhone))
+        {
+            isValid = false;
+            setPhoneErrorMsg("Not a valid phone no.");
+        }
+
+        setPhoneValid(isValid);
     }
 
     const setEmail = (e) => {
-        setEmailValue(e.target.value);
+        const enteredEmail = e.target.value;
+        const regex = /^[^\s@]+@(gmail\.com|yahoo\.in|outlook\.com)$/;
+        const isValidEmail = regex.test(enteredEmail);
+        setEmailValid(isValidEmail);        
+        setEmailValue(enteredEmail);
+        setEmailErrorMsg("Email must follow conventions.");
+    }
+
+    const handlePasswordChange = (e) => {
+        const enteredPw = e.target.value;
+        setPasswordValue(enteredPw);
+
+        //Password validation rules
+        const minLength = 8;
+        const regex = {
+            uppercase: /[A-Z]/,
+            lowercase: /[a-z]/,
+            number: /[0-9]/,
+            specialChar:  /[ -/:-@[-`{-~]/
+        };
+
+        let isValid = true;
+        let message = '';
+
+        if(enteredPw.length < minLength)
+        {
+            isValid = false;
+            message = "Password must be at least 8 characters long.";
+        }
+        if(!regex.uppercase.test(enteredPw))
+        {
+            isValid = false;
+            message = "Password must contain at least one uppercase letter.";
+        }
+        if(!regex.lowercase.test(enteredPw))
+        {
+            isValid = false;
+            message = "Password must contain at least one lowercase letter.";
+        }
+        if (!regex.number.test(enteredPw)) {
+            isValid = false;
+            message = "Password must contain at least one number.";
+        }
+        if (!regex.specialChar.test(enteredPw)) {
+        isValid = false;
+        message = "Password must contain at least one special character.";
+        }
+
+        setPasswordValid(isValid);
+        setErrorMessage(message);
     }
 
     const setRole = (e) => {
@@ -30,6 +98,13 @@ function Register () {
 
     const handleSubmit = async (e) => {
         e.preventDefault();
+
+        if(!passwordValid)
+        {
+            alert("Please enter a valid password");
+            return;
+        }
+
         console.log("Submit!!" + name + ',' + email + ',' + password + ',' + phoneNo);
     
         const data = {
@@ -69,14 +144,17 @@ function Register () {
                 <br/>
                 <label>Email:</label>
                 <input type="email" placeholder="Enter your email" value={email} onChange={setEmail}/>
+                {!emailValid && <div style={{color: 'blue'}}>{emailErrorMsg}</div>}
                 <br/>
                 <br/>
                 <label>Phone no:</label>
                 <input type="tel" placeholder="Enter your phone no." value={phoneNo} onChange={setPhone}/>
+                {!phoneValid && <div style={{color: 'blue'}}>{phoneErrorMsg}</div>}
                 <br/>
                 <br/>
                 <label>Password:</label>
-                <input type="password" placeholder="Enter your password" value={password} onChange={setPassword}/>
+                <input type="password" placeholder="Enter your password" value={password} onChange={handlePasswordChange}/>
+                {!passwordValid && <div style={{color: 'blue'}}>{errorMessage}</div>}
                 <br/>
                 <br/>
                 <label>Role:</label>
