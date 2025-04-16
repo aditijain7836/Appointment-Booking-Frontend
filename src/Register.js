@@ -105,6 +105,18 @@ function Register () {
             return;
         }
 
+        if(!emailValid)
+        {
+            alert("Please enter a valid email ID");
+            return;
+        }
+
+        if(!phoneValid)
+        {
+            alert("Please enter a valid phone no.");
+            return;
+        }
+
         console.log("Submit!!" + name + ',' + email + ',' + password + ',' + phoneNo);
     
         const data = {
