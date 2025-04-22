@@ -24,7 +24,7 @@ function Register () {
         const regex = /[0-9]/;
         let isValid = true;
         
-        if(enteredPhone.length!=10)
+        if(enteredPhone.length!==10)
         {
             isValid = false;
             setPhoneErrorMsg("Minimum length is 10.");
@@ -130,7 +130,7 @@ function Register () {
         try{
             const response = await axios.post("http://localhost:8080/register", data);
 
-            if(response.data == "Success")
+            if(response.data === "Success")
             {
                 alert("User is registered successfully!!");
             }
@@ -147,8 +147,8 @@ function Register () {
 
     return (
         <>
-            <h1>Register</h1>
-            <div className="container">
+            <h1 className="text-center my-5 text-2xl font-extrabold">Register</h1>
+            <div className="flex justify-center ml-40">
             <form onSubmit={handleSubmit}>
                 <label>Name:</label>
                 <input type="text" placeholder="Enter your name" value={name} onChange={setName}/>

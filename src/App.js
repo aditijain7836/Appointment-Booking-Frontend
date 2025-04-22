@@ -1,7 +1,6 @@
-import './index.css';
 import './App.css';
 import { BrowserRouter, Route, Routes } from 'react-router-dom';
-import Register from './Register';
+import Register from './pages/Register';
 import ViewUsers from './ViewUsers';
 import Home from './pages/Home';
 import Login from './pages/Login';
